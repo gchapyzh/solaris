@@ -386,6 +386,13 @@ module.exports = class GameTickService extends EventEmitter {
     }
 
     async _endOfGalacticCycleCheck(game) {
+        // If the credits production type is per tick then award credits
+        // Note: Do not create an event log for this.
+        if (game.settings.galaxy.productionCreditsType === 'perTick') {
+            this.playerService.givePlayerCreditsForTick(game, player); 
+            this.playerService.deductCarrierUpkeepCostForTick(game, player);
+        }
+
         // Check if we have reached the production tick.
         if (game.state.tick % game.settings.galaxy.productionTicks === 0) {
             game.state.productionTick++;
@@ -396,17 +403,17 @@ module.exports = class GameTickService extends EventEmitter {
             for (let i = 0; i < game.galaxy.players.length; i++) {
                 let player = game.galaxy.players[i];
 
-                let creditsResult = this.playerService.givePlayerCreditsEndOfCycleRewards(game, player);
-                let experimentResult = this.researchService.conductExperiments(game, player);
-                let carrierUpkeepResult = this.playerService.deductCarrierUpkeepCost(game, player);
+                let isPerCycle = game.settings.galaxy.productionCreditsType === 'perCycle';
+
+                let creditsResult = isPerCycle ? this.playerService.givePlayerCreditsForCycle(game, player) : null;
+                let carrierUpkeepResult = isPerCycle ? this.playerService.deductCarrierUpkeepCostForCycle(game, player) : null;
+                let experimentResult = this.researchService.conductExperiments(game, player); // Always do experiments per cycle
 
                 this.emit('onPlayerGalacticCycleCompleted', {
                     gameId: game._id,
                     gameTick: game.state.tick,
-                    player, 
-                    creditsEconomy: creditsResult.creditsFromEconomy, 
-                    creditsBanking: creditsResult.creditsFromBanking,
-                    creditsSpecialists: creditsResult.creditsFromSpecialistsTechnology,
+                    player,
+                    credits: creditsResult, // TODO: Need to fix old data and UI
                     experimentTechnology: experimentResult.technology,
                     experimentTechnologyLevel: experimentResult.level,
                     experimentAmount: experimentResult.amount,

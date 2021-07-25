@@ -71,8 +71,8 @@ module.exports = class LedgerService extends EventEmitter {
 
         // If the debtor cannot fully settle the debt then only
         // pay what they can (their total credits)
-        if (debtor.credits < debtAmount) {
-            debtAmount = debtor.credits;
+        if (Math.floor(debtor.credits) < debtAmount) {
+            debtAmount = Math.floor(debtor.credits);
         }
 
         ledgerDebtor.debt += debtAmount;

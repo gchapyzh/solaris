@@ -24,13 +24,13 @@
       </button>
     </div>
     <div class="col-auto pl-0" v-if="userPlayer">
-      <button v-if="canBuildWarpGates && !star.warpGate" :disabled="$isHistoricalMode() || userPlayer.credits < star.upgradeCosts.warpGate || isGameFinished" class="btn btn-sm btn-info mr-1" title="Build a Warp Gate" @click="confirmBuildWarpGate">
+      <button v-if="canBuildWarpGates && !star.warpGate" :disabled="$isHistoricalMode() || Math.floor(userPlayer.credits) < star.upgradeCosts.warpGate || isGameFinished" class="btn btn-sm btn-info mr-1" title="Build a Warp Gate" @click="confirmBuildWarpGate">
         <i class="fas fa-dungeon mr-1"></i>${{star.upgradeCosts.warpGate}}
       </button>
       <button v-if="canBuildWarpGates && star.warpGate" :disabled="$isHistoricalMode() || isGameFinished" class="btn btn-sm btn-danger mr-1" @click="confirmDestroyWarpGate" title="Destroy Warp Gate">
         <i class="fas fa-trash"></i> <i class="fas fa-dungeon ml-1"></i>
       </button>
-      <button :disabled="$isHistoricalMode() || userPlayer.credits < star.upgradeCosts.carriers || star.ships < 1 || isGameFinished" class="btn btn-sm btn-info" @click="onBuildCarrierRequested">
+      <button :disabled="$isHistoricalMode() || Math.floor(userPlayer.credits) < star.upgradeCosts.carriers || star.ships < 1 || isGameFinished" class="btn btn-sm btn-info" @click="onBuildCarrierRequested">
         <i class="fas fa-rocket mr-1"></i>${{star.upgradeCosts.carriers}}
       </button>
     </div>

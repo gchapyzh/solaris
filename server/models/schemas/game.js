@@ -33,7 +33,9 @@ const schema = new Schema({
         galaxy: {
 			galaxyType: { type: Types.String, required: true, enum: ['circular', 'spiral', 'doughnut','circular-balanced', 'irregular'], default: 'circular' },
 			starsPerPlayer: { type: Types.Number, required: true, enum: [5, 10, 20, 30, 50], default: 20 },
-			productionTicks: { type: Types.Number, required: true, enum: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], default: 24 }
+			productionTicks: { type: Types.Number, required: true, enum: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], default: 24 },
+			// TODO: Need a script to migrate existing data.
+			productionCreditsType: { type: Types.String, required: true, enum: ['perCycle','perTick'], default: 'perCycle' },
         },
         specialGalaxy: {
 			carrierCost: { type: Types.String, required: true, enum: ['cheap', 'standard', 'expensive'], default: 'standard' },

@@ -43,7 +43,7 @@ module.exports = class StarUpgradeService extends EventEmitter {
         const terraformedResources = this.starService.calculateTerraformedResources(star.naturalResources, effectiveTechs.terraforming);
         const cost = this.calculateWarpGateCost(game, expenseConfig, terraformedResources);
 
-        if (player.credits < cost) {
+        if (Math.floor(player.credits) < cost) {
             throw new ValidationError(`The player does not own enough credits to afford to upgrade.`);
         }
 
@@ -125,7 +125,7 @@ module.exports = class StarUpgradeService extends EventEmitter {
         const expenseConfig = game.constants.star.infrastructureExpenseMultipliers[game.settings.specialGalaxy.carrierCost];
         const cost = this.calculateCarrierCost(game, expenseConfig);
 
-        if (player.credits < cost) {
+        if (Math.floor(player.credits) < cost) {
             throw new ValidationError(`The player does not own enough credits to afford to build a carrier.`);
         }
 
@@ -270,7 +270,7 @@ module.exports = class StarUpgradeService extends EventEmitter {
 
         let cost = this._calculateUpgradeInfrastructureCost(game, star, expenseConfigKey, economyType, calculateCostCallback);
 
-        if (writeToDB && player.credits < cost) {
+        if (writeToDB && Math.floor(player.credits) < cost) {
             throw new ValidationError(`The player does not own enough credits to afford to upgrade.`);
         }
 
@@ -382,7 +382,7 @@ module.exports = class StarUpgradeService extends EventEmitter {
         const upgradeSummary = await this.generateUpgradeBulkReport(game, player, upgradeStrategy, infrastructureType, amount);
 
         // Check that the amount the player wants to spend isn't more than the amount he has
-        if (player.credits < upgradeSummary.cost) {
+        if (Math.floor(player.credits) < upgradeSummary.cost) {
             throw new ValidationError(`The player does not own enough credits to afford to bulk upgrade.`);
         }
 
@@ -604,7 +604,7 @@ module.exports = class StarUpgradeService extends EventEmitter {
         let ignoredCount = this.starService.listStarsOwnedByPlayerBulkIgnored(game.galaxy.stars, player._id, infrastructureType).length;
         let stars = this._getStarsWithNextUpgradeCost(game, player, infrastructureType, false);
 
-        budget = Math.min(budget, player.credits + 10000); // Prevent players from generating reports for stupid amounts of credits
+        budget = Math.min(budget, Math.floor(player.credits) + 10000); // Prevent players from generating reports for stupid amounts of credits
 
         let upgradeSummary = {
             budget,

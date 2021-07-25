@@ -141,7 +141,7 @@ export default {
     }
   },
   mounted () {
-    this.amount = GameHelper.getUserPlayer(this.$store.state.game).credits
+    this.amount = Math.floor(GameHelper.getUserPlayer(this.$store.state.game).credits)
   },
   methods: {
     onCloseRequested (e) {
@@ -229,7 +229,7 @@ export default {
           this.$toasted.show(`Upgrade complete. Purchased ${response.data.upgraded} ${this.selectedType} for ${response.data.cost} credits.`, { type: 'success' })
 
           if (this.selectedUpgradeStrategy === 'totalCredits') {
-            this.amount = GameHelper.getUserPlayer(this.$store.state.game).credits
+            this.amount = Math.floor(GameHelper.getUserPlayer(this.$store.state.game).credits)
           }
         }
       } catch (err) {

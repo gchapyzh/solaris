@@ -42,7 +42,7 @@ module.exports = class AITradeService {
         // Get the differences in tech levels between the two players that the AI can afford.
         let tradeTechs = await this.tradeService.getTradeableTechnologies(game, player, toPlayer._id);
 
-        tradeTechs = tradeTechs.filter(t => t.cost <= player.credits);
+        tradeTechs = tradeTechs.filter(t => t.cost <= Math.floor(player.credits));
 
         if (!tradeTechs.length) {
             return;

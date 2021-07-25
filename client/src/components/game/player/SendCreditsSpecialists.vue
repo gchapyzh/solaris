@@ -5,7 +5,7 @@
   </div>
 
   <div class="col-12">
-    <p class="mb-2">Send <strong>Specialist Tokens</strong>. (You have <span class="text-warning">{{userPlayer.creditsSpecialists}}</span>)</p>
+    <p class="mb-2">Send <strong>Specialist Tokens</strong>. (You have <span class="text-warning">{{Math.floor(userPlayer.creditsSpecialists)}}</span>)</p>
 
     <form>
       <div class="form-row">

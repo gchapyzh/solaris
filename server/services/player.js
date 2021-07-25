@@ -481,25 +481,47 @@ module.exports = class PlayerService extends EventEmitter {
         });
     }
 
-    givePlayerCreditsEndOfCycleRewards(game, player) {
+    givePlayerCreditsForCycle(game, player) {
         let playerStars = this.starService.listStarsOwnedByPlayer(game.galaxy.stars, player._id);
 
         let totalEco = this.calculateTotalEconomy(playerStars);
 
-        let creditsFromEconomy = totalEco * 10;
-        let creditsFromBanking = this._getBankingReward(game, player, playerStars, totalEco);
-        let creditsTotal = creditsFromEconomy + creditsFromBanking;
-        let creditsFromSpecialistsTechnology = this._getCreditsSpecialistsReward(game, player);
+        let creditsEconomy = totalEco * 10;
+        let creditsBanking = this._getBankingReward(game, player, playerStars, totalEco);
+        let creditsSpecialists = this._getCreditsSpecialistsReward(game, player);
+
+        // Check if the cycle rewards are as a per tick basis, if so we need to award
+        // partial credits.
+        if (game.settings.galaxy.productionCreditsType === 'perTick') {
+            creditsEconomy /= game.settings.galaxy.productionTicks;
+            creditsBanking /= game.settings.galaxy.productionTicks;
+            creditsSpecialists /= game.settings.galaxy.productionTicks;
+        }
+
+        let creditsTotal = creditsEconomy + creditsBanking;
 
         player.credits += creditsTotal;
-        player.creditsSpecialists += creditsFromSpecialistsTechnology;
+        player.creditsSpecialists += creditsSpecialists;
 
         return {
-            creditsFromEconomy,
-            creditsFromBanking,
+            creditsEconomy,
+            creditsBanking,
             creditsTotal,
-            creditsFromSpecialistsTechnology
+            creditsSpecialists
         };
+    }
+
+    givePlayerCreditsForTick(game, player) {
+        // TODO: Need to deduct credits AFTER the amended calculation.
+        let creditsResult = this.givePlayerCreditsForCycle(game, player);
+
+        creditsResult.creditsEconomy /= game.settings.galaxy.productionTicks;
+        creditsResult.creditsBanking /= game.settings.galaxy.productionTicks;
+        creditsResult.creditsSpecialists /= game.settings.galaxy.productionTicks;
+
+        creditsResult.creditsTotal = creditsResult.creditsEconomy + creditsResult.creditsBanking;
+
+        return creditsResult;
     }
 
     _getBankingReward(game, player, playerStars, totalEco) {
@@ -532,7 +554,7 @@ module.exports = class PlayerService extends EventEmitter {
         return player.research.specialists.level;
     }
 
-    deductCarrierUpkeepCost(game, player) {
+    deductCarrierUpkeepCostForCycle(game, player) {
         const upkeepCosts = {
             'none': 0,
             'cheap': 1,
@@ -555,6 +577,15 @@ module.exports = class PlayerService extends EventEmitter {
             carrierCount,
             totalCost
         };
+    }
+
+    deductCarrierUpkeepCostForTick(game, player) {
+        // TODO: Need to deduct credits AFTER the amended calculation.
+        let carrierUpkeepResult = this.deductCarrierUpkeepCostForCycle(game, player);
+
+        carrierUpkeepResult.totalCost /= game.settings.galaxy.productionTicks;
+
+        return carrierUpkeepResult;
     }
 
     async declareReady(game, player) {

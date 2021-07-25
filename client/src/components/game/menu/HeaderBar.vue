@@ -16,11 +16,11 @@
         </div>
         <div class="col-auto text-right pt-1" v-if="userPlayer">
             <span class="pointer" title="Credits" @click="setMenuState(MENU_STATES.BULK_INFRASTRUCTURE_UPGRADE)">
-                <i class="fas fa-dollar-sign mr-1"></i>{{userPlayer.credits}}
+                <i class="fas fa-dollar-sign mr-1"></i>{{Math.floor(userPlayer.credits)}}
             </span>
 
             <span class="pointer" v-if="isSpecialistsCurrencyCreditsSpecialists" title="Specialist Tokens" @click="setMenuState(MENU_STATES.BULK_INFRASTRUCTURE_UPGRADE)">
-                <i class="fas fa-coins mr-1"></i>{{userPlayer.creditsSpecialists}}
+                <i class="fas fa-coins mr-1"></i>{{Math.floor(userPlayer.creditsSpecialists)}}
             </span>
 
             <research-progress class="d-none d-md-inline-block ml-1" @onViewResearchRequested="onViewResearchRequested"/>

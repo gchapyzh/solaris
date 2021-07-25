@@ -87,7 +87,7 @@
         <infrastructureUpgradeCompact 
           v-if="isOwnedByUserPlayer && !userPlayer.defeated && star.upgradeCosts != null"
           :star="star"
-          :availableCredits="userPlayer.credits"
+          :availableCredits="Math.floor(userPlayer.credits)"
           :economy="star.upgradeCosts.economy"
           :industry="star.upgradeCosts.industry"
           :science="star.upgradeCosts.science"
@@ -163,7 +163,7 @@
 
         <infrastructureUpgrade v-if="isOwnedByUserPlayer && !userPlayer.defeated && star.upgradeCosts != null"
           :star="star"
-          :availableCredits="userPlayer.credits"
+          :availableCredits="Math.floor(userPlayer.credits)"
           :economy="star.upgradeCosts.economy"
           :industry="star.upgradeCosts.industry"
           :science="star.upgradeCosts.science"/>
@@ -182,7 +182,7 @@
             <p class="mb-2">Build a carrier to transport ships through hyperspace.</p>
           </div>
           <div class="col-4">
-            <button :disabled="$isHistoricalMode() || userPlayer.credits < star.upgradeCosts.carriers || star.ships < 1 || isGameFinished" class="btn btn-block btn-primary mb-2" @click="onBuildCarrierRequested">Build for ${{star.upgradeCosts.carriers}}</button>
+            <button :disabled="$isHistoricalMode() || Math.floor(userPlayer.credits) < star.upgradeCosts.carriers || star.ships < 1 || isGameFinished" class="btn btn-block btn-primary mb-2" @click="onBuildCarrierRequested">Build for ${{star.upgradeCosts.carriers}}</button>
           </div>
         </div>
 
@@ -191,7 +191,7 @@
             <p class="mb-2">Build a Warp Gate to accelerate carrier movement.</p>
           </div>
           <div class="col-4">
-            <modalButton v-if="!star.warpGate" :disabled="$isHistoricalMode() || userPlayer.credits < star.upgradeCosts.warpGate || isGameFinished" modalName="buildWarpGateModal" classText="btn btn-block btn-primary mb-2">Build for ${{star.upgradeCosts.warpGate}}</modalButton>
+            <modalButton v-if="!star.warpGate" :disabled="$isHistoricalMode() || Math.floor(userPlayer.credits) < star.upgradeCosts.warpGate || isGameFinished" modalName="buildWarpGateModal" classText="btn btn-block btn-primary mb-2">Build for ${{star.upgradeCosts.warpGate}}</modalButton>
             <modalButton v-if="star.warpGate" :disabled="$isHistoricalMode() || isGameFinished" modalName="destroyWarpGateModal" classText="btn btn-block btn-danger mb-2">Destroy Gate</modalButton>
           </div>
         </div>

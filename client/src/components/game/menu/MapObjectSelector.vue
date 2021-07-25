@@ -70,7 +70,7 @@ export default {
     hasEnoughCredits(mapObject) {
       let star = mapObject
       let userPlayer = gameHelper.getUserPlayer(this.$store.state.game)
-      let availableCredits = userPlayer.credits
+      let availableCredits = Math.floor(userPlayer.credits)
 
       return (availableCredits >= star.data.upgradeCosts.carriers)
     },

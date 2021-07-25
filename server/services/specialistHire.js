@@ -155,9 +155,9 @@ module.exports = class SpecialistHireService {
 
         switch (game.settings.specialGalaxy.specialistsCurrency) {
             case 'credits':
-                return player.credits >= cost.credits;
+                return Math.floor(player.credits) >= cost.credits;
             case 'creditsSpecialists':
-                return player.creditsSpecialists >= cost.creditsSpecialists;
+                return Math.floor(player.creditsSpecialists) >= cost.creditsSpecialists;
             default:
                 throw new Error(`Unsupported specialist currency type: ${game.settings.specialGalaxy.specialistsCurrency}`);
         }

@@ -18,7 +18,7 @@
         </div>
         <div class="col-5">
           <modalButton modalName="shareTechnologyModal" classText="btn btn-success btn-block" 
-            :disabled="$isHistoricalMode() || isSendingTech || !availableTechnologies.length || selectedTechnology.cost > userPlayer.credits"><i class="fas fa-paper-plane"></i> Share</modalButton>
+            :disabled="$isHistoricalMode() || isSendingTech || !availableTechnologies.length || selectedTechnology.cost > Math.floor(userPlayer.credits)"><i class="fas fa-paper-plane"></i> Share</modalButton>
         </div>
       </div>
     </form>

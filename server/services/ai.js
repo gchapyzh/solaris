@@ -29,14 +29,14 @@ module.exports = class AIService {
     }
 
     async _playFirstTick(game, player) {
-        if (!player.credits || player.credits < 0) {
+        if (!player.credits || Math.floor(player.credits) <= 0) {
             return
         }
 
         // On the first tick after production:
         // 1. Bulk upgrade X% of credits to ind and sci.
-        let creditsToSpendSci = Math.floor(player.credits / 100 * FIRST_TICK_BULK_UPGRADE_SCI_PERCENTAGE);
-        let creditsToSpendInd = Math.floor(player.credits / 100 * FIRST_TICK_BULK_UPGRADE_IND_PERCENTAGE);
+        let creditsToSpendSci = Math.floor(Math.floor(player.credits) / 100 * FIRST_TICK_BULK_UPGRADE_SCI_PERCENTAGE);
+        let creditsToSpendInd = Math.floor(Math.floor(player.credits) / 100 * FIRST_TICK_BULK_UPGRADE_IND_PERCENTAGE);
 
         if (creditsToSpendSci) {
             await this.starUpgradeService.upgradeBulk(game, player, 'totalCredits', 'science', creditsToSpendSci, false);
@@ -48,13 +48,13 @@ module.exports = class AIService {
     }
 
     async _playLastTick(game, player) {
-        if (!player.credits || player.credits <= 0) {
+        if (!player.credits || Math.floor(player.credits) <= 0) {
             return
         }
 
         // On the last tick of the cycle:
         // 1. Spend remaining credits upgrading economy.
-        let creditsToSpendEco = Math.floor(player.credits / 100 * LAST_TICK_BULK_UPGRADE_ECO_PERCENTAGE);
+        let creditsToSpendEco = Math.floor(Math.floor(player.credits) / 100 * LAST_TICK_BULK_UPGRADE_ECO_PERCENTAGE);
 
         if (creditsToSpendEco) {
             await this.starUpgradeService.upgradeBulk(game, player, 'totalCredits', 'economy', creditsToSpendEco, false);

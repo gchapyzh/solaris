@@ -52,7 +52,7 @@ module.exports = class TradeService extends EventEmitter {
 
         this._tradeScanningCheck(game, fromPlayer, toPlayer);
 
-        if (fromPlayer.credits < amount) {
+        if (Math.floor(fromPlayer.credits) < amount) {
             throw new ValidationError(`You not own ${amount} credits.`);
         }
 
@@ -114,7 +114,7 @@ module.exports = class TradeService extends EventEmitter {
 
         this._tradeScanningCheck(game, fromPlayer, toPlayer);
 
-        if (fromPlayer.creditsSpecialists < amount) {
+        if (Math.floor(fromPlayer.creditsSpecialists) < amount) {
             throw new ValidationError(`You do not own ${amount} specialist tokens.`);
         }
 

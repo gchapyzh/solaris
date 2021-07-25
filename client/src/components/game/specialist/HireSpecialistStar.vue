@@ -76,7 +76,11 @@ export default {
       this.$emit('onOpenStarDetailRequested', star._id)
     },
     async hireSpecialist (specialist) {
-        if (!await this.$confirm('Hire specialist', `Are you sure you want to hire a ${specialist.name} for ${this.getSpecialistActualCostString(specialist)}?`)) {
+        if (!await this.$confirm('Hire Specialist', `Are you sure you want to hire a ${specialist.name} for ${this.getSpecialistActualCostString(specialist)}?`)) {
+            return
+        }
+        
+        if (this.star.specialistId && !await this.$confirm('Replace Specialist', `The star already has a [${this.star.specialist.name}] hired, are you sure you want to replace it?`)) {
             return
         }
         
